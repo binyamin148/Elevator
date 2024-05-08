@@ -3,6 +3,17 @@
   height: 100vh;
   background-color: lightblue;
   position: relative;
+  display: flex; /* נוסף כאן */
+  flex-direction: column; /* נוסף כאן */
+  justify-content: flex-end; /* נוסף כאן */
+}
+
+.elevator-container {
+  width: 100px;
+  height: auto;
+  margin-left: 110px;
+  display: flex; /* הוסף כאן */
+  flex-direction: column; /* הוסף כאן */
 }
 
 .floor {
@@ -17,18 +28,12 @@
                     linear-gradient(155deg, #d00 23px, transparent 23px);
   background-size: 58px 58px;
   background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+  border-bottom: 7px solid #000;
+  border-top: 0px solid #000;
+  display: block;
+  float: left;
 }
 
-.elevator {
-  position: absolute;
-  left: 120px;
-  width: 40px;
-  height: 60px;
-  margin-left: 120px;
-  margin-bottom: 40px;
-  /* background-image: url("./elv.png"); */
-
-}
 
 
 .floor-content {
