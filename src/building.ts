@@ -1,38 +1,111 @@
-import { Elevator } from './elevator';
 import { Floor } from './floor';
+import { Settings } from './settings';
+import { Elevator } from './elevator';
 
 export class Building {
-  floors: Floor[];
-  elevators: Elevator[];
+  floors: Floor[] = [];
+  elevators: Elevator[] = [];
+  buildingElement: HTMLDivElement;
+  floorsElement: HTMLDivElement;
+  elevatorShaft: HTMLDivElement;
 
-  constructor(numFloors: number, numElevators: number) {
-    this.floors = [];
-    this.elevators = [];
-    this.createFloors(numFloors);
-    this.createElevators(numElevators);
+  constructor(num_of_floors: number, num_of_elevators: number) {
+    this.buildingElement = document.createElement('div');
+    this.floorsElement = document.createElement('div');
+    this.elevatorShaft = document.createElement('div');
+
+    this.buildingElement.className = 'building';
+    this.elevatorShaft.className = 'elevatorShaft';
+    this.floorsElement.className = 'floors';
+
+    this.createElevators(num_of_elevators);
+    this.createFloors(num_of_floors);
+
+    this.appendElements();
   }
 
-  createFloors(numFloors: number): void {
-    for (let i = 0; i < numFloors; i++) {
-      const floor = new Floor(i);
-      this.floors.push(floor);
-    }
-  }
-
-  createElevators(numElevators: number): void {
-    for (let i = 0; i < numElevators; i++) {
+  private createElevators(num_of_elevators: number): void {
+    for (let i = 0; i < num_of_elevators; i++) {
       const elevator = new Elevator(i);
       this.elevators.push(elevator);
+      this.elevatorShaft.appendChild(elevator.elevatorElement);
     }
   }
 
-  public renderBuilding(container: HTMLElement): void {
-    container.innerHTML = '';
-    this.floors.forEach((floor) => {
-      container.appendChild(floor.getFloorElement());
-    });
-    this.elevators.forEach((elevator) => {
-      container.appendChild(elevator.getElevatorElement());
-    });
+  private createFloors(num_of_floors: number): void {
+    for (let i = 0; i <= num_of_floors; i++) {
+      const floor: Floor = new Floor(i, this.dispatchElevator);
+      this.floors.push(floor);
+      this.addLineFloorElements(floor, i, num_of_floors);
+    }
   }
+
+  private addLineFloorElements(
+    floor: Floor,
+    index: number,
+    totalFloors: number,
+  ): void {
+    this.floorsElement.appendChild(floor.floorElement);
+    if (index !== totalFloors) {
+      this.floorsElement.appendChild(floor.lineElement);
+    }
+  }
+
+  private appendElements(): void {
+    const building: HTMLElement | null = document.getElementById('building');
+    if (building) {
+      building.appendChild(this.floorsElement);
+      building.appendChild(this.elevatorShaft);
+    }
+  }
+
+  private releaseFloor = (floorNumber: number): void => {
+    this.floors[floorNumber].isInActive = false;
+    this.floors[floorNumber].buttonElement.style.color = 'hsla(0,0%,20%,1)';
+  };
+
+  private selectElevator = (
+    floorNumber: number,
+    currentTime: number,
+  ): Elevator => {
+    let minTime: number = Infinity;
+    let elevatorID: number = 0;
+
+    for (let elevator of this.elevators) {
+      const currentMin: number =
+        Math.abs(elevator.destination - floorNumber) * 500 +
+        Settings.timeInFloor +
+        (currentTime > elevator.timer ? 0 : elevator.timer - currentTime);
+
+      if (currentMin < minTime) {
+        minTime = currentMin;
+        elevatorID = elevator.elevatorNumber;
+      }
+    }
+    return this.elevators[elevatorID];
+  };
+
+  private dispatchElevator = (floorNumber: number): void => {
+    let currentTime: number = Date.now();
+    const selectedElevator: Elevator = this.selectElevator(
+      floorNumber,
+      currentTime,
+    );
+    let gap: number = Math.abs(selectedElevator.destination - floorNumber);
+    selectedElevator.destination = floorNumber;
+
+    if (currentTime > selectedElevator.timer) {
+      selectedElevator.moveToFloor(floorNumber, this.releaseFloor);
+      selectedElevator.timer = currentTime + (gap * 0.5 + 2) * 1000;
+      this.floors[floorNumber].startCounter(gap * 0.5);
+    } else {
+      setTimeout(() => {
+        selectedElevator.moveToFloor(floorNumber, this.releaseFloor);
+      }, selectedElevator.timer - currentTime);
+      selectedElevator.timer += (gap * 0.5 + 2) * 1000;
+      this.floors[floorNumber].startCounter(
+        gap * 0.5 + (selectedElevator.timer - currentTime) / 1000,
+      );
+    }
+  };
 }

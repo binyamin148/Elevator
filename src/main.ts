@@ -1,8 +1,14 @@
 import { Building } from './building';
+import { Settings } from './settings';
 
-const building = new Building(10, 1);
-const buildingContainer = document.getElementById('building-container');
-
-if (buildingContainer) {
-  building.renderBuilding(buildingContainer);
+class BuildingFactory {
+  static getBuilding(numFloors: number, numElevators: number): Building {
+      return new Building(numFloors, numElevators);
+  }
 }
+
+const settings: Settings = new Settings();
+
+const building1 : Building =  BuildingFactory.getBuilding(Settings.num_of_floors, Settings.num_of_elevators);
+const building2 : Building =  BuildingFactory.getBuilding(4, 1);
+const building3 : Building =  BuildingFactory.getBuilding(8, 2);
