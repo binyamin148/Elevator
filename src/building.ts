@@ -134,12 +134,12 @@ export class Building {
    * @param floorNumber The number of the floor calling the elevator.
    */
   private dispatchElevator = (floorNumber: number): void => {
-    let currentTime: number = Date.now();
+    const currentTime: number = Date.now();
     const selectedElevator: Elevator = this.selectElevator(
       floorNumber,
       currentTime,
     );
-    let gap: number = Math.abs(selectedElevator.destination - floorNumber);
+    const gap: number = Math.abs(selectedElevator.destination - floorNumber);
     selectedElevator.destination = floorNumber;
 
     if (currentTime > selectedElevator.timer) {
@@ -149,11 +149,15 @@ export class Building {
     } else {
       setTimeout(() => {
         selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
+        this.floors[floorNumber].startTimer(
+          this.getRemainingTime(selectedElevator.timer, currentTime),
+        );
       }, selectedElevator.timer - currentTime);
       selectedElevator.timer += (gap * 0.5 + 2) * 1000;
-      this.floors[floorNumber].startTimer(
-        gap * 0.5 + (selectedElevator.timer - currentTime) / 1000,
-      );
     }
+  };
+
+  private getRemainingTime = (timer: number, currentTime: number): number => {
+    return (timer - currentTime - Settings[0].timeInFloor) / 1000;
   };
 }
