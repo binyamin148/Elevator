@@ -2,13 +2,30 @@ import { Floor } from './floor';
 import { Settings } from './settings';
 import { Elevator } from './elevator';
 
+/**
+ * Represents a building with floors and elevators.
+ */
 export class Building {
+  /** An array of floor objects in the building. */
   floors: Floor[] = [];
+
+  /** An array of elevator objects in the building. */
   elevators: Elevator[] = [];
+
+  /** The HTML div element representing the building. */
   buildingElement: HTMLDivElement;
+
+  /** The HTML div element containing floor elements. */
   floorsElement: HTMLDivElement;
+
+  /** The HTML div element representing the elevator shaft. */
   elevatorShaft: HTMLDivElement;
 
+  /**
+   * Creates an instance of Building.
+   * @param num_of_floors The number of floors in the building.
+   * @param num_of_elevators The number of elevators in the building.
+   */
   constructor(num_of_floors: number, num_of_elevators: number) {
     this.buildingElement = document.createElement('div');
     this.floorsElement = document.createElement('div');
@@ -24,6 +41,10 @@ export class Building {
     this.appendElements();
   }
 
+  /**
+   * Creates elevator objects and appends them to the elevator shaft.
+   * @param num_of_elevators The number of elevators to create.
+   */
   private createElevators(num_of_elevators: number): void {
     for (let i = 0; i < num_of_elevators; i++) {
       const elevator = new Elevator(i);
@@ -32,6 +53,10 @@ export class Building {
     }
   }
 
+  /**
+   * Creates floor objects and appends them to the building.
+   * @param num_of_floors The number of floors to create.
+   */
   private createFloors(num_of_floors: number): void {
     for (let i = 0; i <= num_of_floors; i++) {
       const floor: Floor = new Floor(i, this.dispatchElevator);
@@ -40,6 +65,12 @@ export class Building {
     }
   }
 
+  /**
+   * Adds floor and line elements to the building.
+   * @param floor The floor object to add.
+   * @param index The index of the floor.
+   * @param totalFloors The total number of floors.
+   */
   private addLineFloorElements(
     floor: Floor,
     index: number,
@@ -51,6 +82,9 @@ export class Building {
     }
   }
 
+  /**
+   * Appends building elements to the DOM.
+   */
   private appendElements(): void {
     const building: HTMLElement | null = document.getElementById('building');
     if (building) {
@@ -59,11 +93,21 @@ export class Building {
     }
   }
 
+  /**
+   * Releases a floor by resetting its button status.
+   * @param floorNumber The number of the floor to release.
+   */
   private releaseFloor = (floorNumber: number): void => {
     this.floors[floorNumber].isButtonPressed = false;
     this.floors[floorNumber].buttonElement.style.color = 'hsla(0,0%,20%,1)';
   };
 
+  /**
+   * Selects an elevator to respond to a floor call.
+   * @param floorNumber The number of the floor calling the elevator.
+   * @param currentTime The current time in milliseconds.
+   * @returns The selected elevator.
+   */
   private selectElevator = (
     floorNumber: number,
     currentTime: number,
@@ -85,6 +129,10 @@ export class Building {
     return this.elevators[elevatorID];
   };
 
+  /**
+   * Dispatches an elevator to a floor call.
+   * @param floorNumber The number of the floor calling the elevator.
+   */
   private dispatchElevator = (floorNumber: number): void => {
     let currentTime: number = Date.now();
     const selectedElevator: Elevator = this.selectElevator(
