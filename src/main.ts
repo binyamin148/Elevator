@@ -1,23 +1,6 @@
-import { Building } from './building';
-import { Settings } from './settings';
+import { BuildingFactory } from './factoryBuilding';
+import type { Building } from './building';
 
-class BuildingFactory {
-  static getBuilding(numFloors: number, numElevators: number): Building {
-    return new Building(numFloors, numElevators);
-  }
-}
-
-// const settings: Settings = new Settings();
-
-const building1: Building = BuildingFactory.getBuilding(
-  Settings[0].num_of_floors,
-  Settings[0].num_of_elevators,
-);
-const building2: Building = BuildingFactory.getBuilding(
-  Settings[1].num_of_floors,
-  Settings[1].num_of_elevators,
-);
-const building3: Building = BuildingFactory.getBuilding(
-  Settings[2].num_of_floors,
-  Settings[2].num_of_elevators,
-);
+const building1: Building = BuildingFactory.getBuilding('building1');
+const building2: Building = BuildingFactory.getBuilding('building2');
+const building3: Building = BuildingFactory.getBuilding('building3');
