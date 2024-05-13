@@ -20,9 +20,6 @@ export class Floor {
     this.appendElements();
   }
 
-  /**
-   * Creates a new HTMLDivElement representing a floor in the elevator system.
-   */
   private createFloorContainer(): HTMLDivElement {
     const container = document.createElement('div');
     container.classList.add('floor');
@@ -30,9 +27,6 @@ export class Floor {
     return container;
   }
 
-  /**
-   * Creates a new HTMLButtonElement representing a button on the floor element.
-   */
   private createButtonElement(): HTMLButtonElement {
     const button = document.createElement('button');
     button.className = 'metal linear';
@@ -41,9 +35,6 @@ export class Floor {
     return button;
   }
 
-  /**
-   * Creates a new HTMLDivElement representing a blackLine under the floor element.
-   */
   private createLineElement(): HTMLDivElement {
     const lineElement = document.createElement('div');
     lineElement.className = 'blackLine';

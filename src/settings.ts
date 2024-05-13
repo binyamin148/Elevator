@@ -1,7 +1,20 @@
-export class Settings {
-    static num_of_buildings: number = 3
-    static num_of_elevators: number = 3;
-    static num_of_floors: number = 15;
-    static timeInFloor: number = 2000;
-    static timeToOpenDoor: number = 2000;
-}
+export const Settings = [
+    {
+        num_of_elevators: 3,
+        num_of_floors: 15,
+        timeInFloor: 2000,
+        timeToOpenDoor: 2000
+    },
+    {
+        num_of_elevators: 1,
+        num_of_floors: 5,
+        timeInFloor: 2000,
+        timeToOpenDoor: 2000
+    },
+    {
+        num_of_elevators: 2,
+        num_of_floors: 10,
+        timeInFloor: 2000,
+        timeToOpenDoor: 2000
+    }
+];

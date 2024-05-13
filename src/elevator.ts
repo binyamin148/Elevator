@@ -43,7 +43,7 @@ export class Elevator {
 
     setTimeout(() => {
       this.playBell();
-      const timeInFloor = Settings.timeInFloor;
+      const timeInFloor = Settings[0].timeInFloor;
       setTimeout(() => {
         this.stopBell();
         freeFloor(targetFloor);

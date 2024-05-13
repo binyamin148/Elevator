@@ -74,7 +74,7 @@ export class Building {
     for (let elevator of this.elevators) {
       const currentMin: number =
         Math.abs(elevator.destination - floorNumber) * 500 +
-        Settings.timeInFloor +
+        Settings[0].timeInFloor +
         (currentTime > elevator.timer ? 0 : elevator.timer - currentTime);
 
       if (currentMin < minTime) {
