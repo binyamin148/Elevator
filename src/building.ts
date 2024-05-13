@@ -60,7 +60,7 @@ export class Building {
   }
 
   private releaseFloor = (floorNumber: number): void => {
-    this.floors[floorNumber].isInActive = false;
+    this.floors[floorNumber].isButtonPressed = false;
     this.floors[floorNumber].buttonElement.style.color = 'hsla(0,0%,20%,1)';
   };
 
@@ -95,15 +95,15 @@ export class Building {
     selectedElevator.destination = floorNumber;
 
     if (currentTime > selectedElevator.timer) {
-      selectedElevator.moveToFloor(floorNumber, this.releaseFloor);
+      selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
       selectedElevator.timer = currentTime + (gap * 0.5 + 2) * 1000;
-      this.floors[floorNumber].startCounter(gap * 0.5);
+      this.floors[floorNumber].startTimer(gap * 0.5);
     } else {
       setTimeout(() => {
-        selectedElevator.moveToFloor(floorNumber, this.releaseFloor);
+        selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
       }, selectedElevator.timer - currentTime);
       selectedElevator.timer += (gap * 0.5 + 2) * 1000;
-      this.floors[floorNumber].startCounter(
+      this.floors[floorNumber].startTimer(
         gap * 0.5 + (selectedElevator.timer - currentTime) / 1000,
       );
     }

@@ -7,7 +7,6 @@ export class Elevator {
   currentFloor: number;
   destination: number;
   timer: number;
-  isElevatorMoving: boolean;
 
   constructor(elevatorNumber: number) {
     this.elevatorNumber = elevatorNumber;
@@ -16,7 +15,6 @@ export class Elevator {
     this.currentFloor = 0;
     this.destination = 0;
     this.timer = 0;
-    this.isElevatorMoving = false;
   }
 
   private createElevatorElement(): HTMLImageElement {
@@ -32,16 +30,16 @@ export class Elevator {
     return audio;
   }
 
-  public moveToFloor(
+  public moveElevatorToFloor(
     targetFloor: number,
     freeFloor: (floorNumber: number) => void,
   ): void {
-    const gap: number = Math.abs(this.currentFloor - targetFloor);
+    const currentFloor = this.currentFloor;
+
+    const gap: number = Math.abs(currentFloor - targetFloor);
 
     this.animationMovementElevator(targetFloor);
     this.currentFloor = targetFloor;
-
-    this.isElevatorMoving = true; 
 
     setTimeout(() => {
       this.playBell();
@@ -49,21 +47,18 @@ export class Elevator {
       setTimeout(() => {
         this.stopBell();
         freeFloor(targetFloor);
-        this.isElevatorMoving = false; 
       }, timeInFloor);
-    }, gap * 0.5 * 1000);
-
-    setTimeout(() => {
-        this.isElevatorMoving = false;
-    }, 2000);
+    }, gap * 0.5 * 1000)
   }
 
   private animationMovementElevator(targetFloor: number): void {
-    if (!this.isElevatorMoving) {      
-      const travelTime = Math.abs(this.currentFloor - targetFloor);
-      this.elevatorElement.style.transition = `transform ${travelTime * 0.5}s ease`;
-      this.elevatorElement.style.transform = `translateY(${-targetFloor * 110}px)`;
-    }
+    const travelTime = Math.abs(this.currentFloor - targetFloor);
+    this.elevatorElement.style.transition = `transform ${
+      travelTime * 0.5
+    }s ease`;
+    this.elevatorElement.style.transform = `translateY(${
+      -targetFloor * 110
+    }px)`;
   }
 
   private playBell(): void {
