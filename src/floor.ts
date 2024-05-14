@@ -119,7 +119,7 @@ export class Floor {
       const countdown = setInterval(() => {
         remainingTime--;
         this.updateTimer(remainingTime);
-        if (remainingTime <= 0) {
+        if (remainingTime < 0) {
           clearInterval(countdown);
           this.timerElement.textContent = null;
         }

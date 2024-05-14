@@ -149,15 +149,15 @@ export class Building {
     } else {
       setTimeout(() => {
         selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
-        this.floors[floorNumber].startTimer(
-          this.getRemainingTime(selectedElevator.timer, currentTime),
-        );
       }, selectedElevator.timer - currentTime);
+      this.floors[floorNumber].startTimer(
+        this.getRemainingTime(selectedElevator.timer, currentTime),
+      );
       selectedElevator.timer += (gap * 0.5 + 2) * 1000;
     }
   };
 
   private getRemainingTime = (timer: number, currentTime: number): number => {
-    return (timer - currentTime - Settings[0].timeInFloor) / 1000;
+    return (timer - currentTime) / 1000;
   };
 }
