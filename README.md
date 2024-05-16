@@ -9,8 +9,7 @@ The project consists of the following main components:
 - **Elevator**: Represents an elevator with movement functionality.
 - **Floor**: Represents a floor in the building with a button and timer functionality.
 - **Building**: Represents a building with floors and elevators.
-- **BuildingFactory**: Factory class to create and manage building instances.
-- **Settings**: Contains configurations for different buildings.
+- **ElevatorController**: Controls the elevators within the building.
 
 ## Components
 
@@ -40,6 +39,13 @@ The project consists of the following main components:
 - **Methods**:
   - `startTimer(duration: number)`: Starts a timer for the floor.
 
+### ElevatorController
+
+- **Methods**:
+  - `selectElevator(floorNumber: number, currentTime: number, elevators: Elevator[]): Elevator`: Selects an elevator to respond to a floor call.
+  - `dispatchElevator(floorNumber: number, elevators: Elevator[], floors: Floor[], releaseFloor: (floorNumber: number) => void): void`: Dispatches an elevator to a floor call.
+  - `getRemainingTime(timer: number, currentTime: number): number`:Calculates the remaining time until an event.
+
 ### Building
 
 - **Properties**:
@@ -50,7 +56,6 @@ The project consists of the following main components:
   - `elevatorShaft`: The HTML div element representing the elevator shaft.
 - **Methods**:
   - `releaseFloor(floorNumber: number)`: Releases a floor by resetting its button status.
-  - `selectElevator(floorNumber: number, currentTime: number)`: Selects an elevator to respond to a floor call.
   - `dispatchElevator(floorNumber: number)`: Dispatches an elevator to a floor call.
 
 ### BuildingFactory
