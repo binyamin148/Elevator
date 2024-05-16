@@ -127,6 +127,7 @@ export class Floor {
     }, initialDelay * 1000);
   }
 
+
   /**
    * Updates the timer display.
    * @param num The remaining time in seconds.
