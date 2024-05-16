@@ -1,6 +1,6 @@
 import { Floor } from './floor';
-import { Settings } from './settings';
 import { Elevator } from './elevator';
+import { ElevatorController } from './elevatorController';
 
 /**
  * Represents a building with floors and elevators.
@@ -103,61 +103,15 @@ export class Building {
   };
 
   /**
-   * Selects an elevator to respond to a floor call.
-   * @param floorNumber The number of the floor calling the elevator.
-   * @param currentTime The current time in milliseconds.
-   * @returns The selected elevator.
-   */
-  private selectElevator = (
-    floorNumber: number,
-    currentTime: number,
-  ): Elevator => {
-    let minTime: number = Infinity;
-    let elevatorID: number = 0;
-
-    for (let elevator of this.elevators) {
-      const currentMin: number =
-        Math.abs(elevator.destination - floorNumber) * 500 +
-        Settings[0].timeInFloor +
-        (currentTime > elevator.timer ? 0 : elevator.timer - currentTime);
-
-      if (currentMin < minTime) {
-        minTime = currentMin;
-        elevatorID = elevator.elevatorNumber;
-      }
-    }
-    return this.elevators[elevatorID];
-  };
-
-  /**
    * Dispatches an elevator to a floor call.
    * @param floorNumber The number of the floor calling the elevator.
    */
   private dispatchElevator = (floorNumber: number): void => {
-    const currentTime: number = Date.now();
-    const selectedElevator: Elevator = this.selectElevator(
+    ElevatorController.dispatchElevator(
       floorNumber,
-      currentTime,
+      this.elevators,
+      this.floors,
+      this.releaseFloor,
     );
-    const gap: number = Math.abs(selectedElevator.destination - floorNumber);
-    selectedElevator.destination = floorNumber;
-
-    if (currentTime > selectedElevator.timer) {
-      selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
-      selectedElevator.timer = currentTime + (gap * 0.5 + 2) * 1000;
-      this.floors[floorNumber].startTimer(gap * 0.5);
-    } else {
-      setTimeout(() => {
-        selectedElevator.moveElevatorToFloor(floorNumber, this.releaseFloor);
-      }, selectedElevator.timer - currentTime);
-      this.floors[floorNumber].startTimer(
-        this.getRemainingTime(selectedElevator.timer, currentTime),
-      );
-      selectedElevator.timer += (gap * 0.5 + 2) * 1000;
-    }
-  };
-
-  private getRemainingTime = (timer: number, currentTime: number): number => {
-    return (timer - currentTime) / 1000;
   };
 }
