@@ -1,4 +1,4 @@
-import { BuildingFactory } from './factoryBuilding';
+import { BuildingFactory } from './buildingFactory';
 import type { Building } from './building';
 
 // Get instances of buildings using the BuildingFactory
