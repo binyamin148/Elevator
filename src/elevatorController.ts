@@ -12,7 +12,7 @@ export class ElevatorController {
    */
   static selectElevator(floorNumber: number, currentTime: number, elevators: Elevator[]): Elevator {
     let selectedElevator: Elevator = elevators[0];
-    let minTime: number = Infinity;
+    let minTime: number = Date.now();
 
     for (let elevator of elevators) {
       const travelTime: number = this.calculateTravelTime(elevator, floorNumber, currentTime);
