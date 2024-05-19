@@ -16,7 +16,7 @@ export class ElevatorController {
     elevators: Elevator[],
   ): Elevator {
     let minTime: number = Infinity;
-    let elevatorID: number = 0;
+    let elevatorNumber: number = 0;
 
     for (let elevator of elevators) {
       const currentMin: number =
@@ -26,10 +26,10 @@ export class ElevatorController {
 
       if (currentMin < minTime) {
         minTime = currentMin;
-        elevatorID = elevator.elevatorNumber;
+        elevatorNumber = elevator.elevatorNumber;
       }
     }
-    return elevators[elevatorID];
+    return elevators[elevatorNumber];
   }
 
   /**
