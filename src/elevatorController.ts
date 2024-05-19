@@ -14,12 +14,12 @@ export class ElevatorController {
     let selectedElevator: Elevator = elevators[0];
     let minTime: number = Date.now();
 
-    for (let elevator of elevators) {
-      const travelTime: number = this.calculateTravelTime(elevator, floorNumber, currentTime);
+    for (let elevatorNumber of elevators) {
+      const travelTime: number = this.calculateTravelTime(elevatorNumber, floorNumber, currentTime);
 
       if (travelTime < minTime) {
         minTime = travelTime;
-        selectedElevator = elevator;
+        selectedElevator = elevatorNumber;
       }
     }
 
@@ -28,15 +28,15 @@ export class ElevatorController {
 
   /**
    * Calculates the travel time for an elevator to reach the floor.
-   * @param elevator The elevator object.
+   * @param elevatorNumber The number of elevator object.
    * @param floorNumber The number of the floor calling the elevator.
    * @param currentTime The current time in milliseconds.
    * @returns The travel time in milliseconds.
    */
-  static calculateTravelTime(elevator: Elevator, floorNumber: number, currentTime: number): number {
-    const distanceTime: number = Math.abs(elevator.destination - floorNumber) * 500;
+  static calculateTravelTime(elevatorNumber: Elevator, floorNumber: number, currentTime: number): number {
+    const distanceTime: number = Math.abs(elevatorNumber.destination - floorNumber) * 500;
     const floorTime: number = Settings[0].timeInFloor;
-    const waitingTime: number = currentTime > elevator.timer ? 0 : elevator.timer - currentTime;
+    const waitingTime: number = currentTime > elevatorNumber.timer ? 0 : elevatorNumber.timer - currentTime;
     return distanceTime + floorTime + waitingTime;
   }
 
@@ -63,37 +63,37 @@ export class ElevatorController {
 
   /**
    * Moves the elevator immediately to the floor.
-   * @param elevator The elevator to move.
+   * @param elevatorNumber The elevator number to move.
    * @param floorNumber The floor number to move the elevator to.
    * @param releaseFloor A function to release the floor.
    * @param gap The number of floors to travel.
    * @param currentTime The current time in milliseconds.
    * @param floors The array of floor objects in the building.
    */
-  static moveElevatorImmediately(elevator: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
-    elevator.moveElevatorToFloor(floorNumber, releaseFloor);
-    elevator.timer = currentTime + (gap * 0.5 + 2) * 1000;
+  static moveElevatorImmediately(elevatorNumber: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
+    elevatorNumber.moveElevatorToFloor(floorNumber, releaseFloor);
+    elevatorNumber.timer = currentTime + (gap * 0.5 + 2) * 1000;
     floors[floorNumber].startTimer(gap * 0.5);
   }
 
   /**
    * Schedules the elevator to move to the floor at a later time.
-   * @param elevator The elevator to move.
+   * @param elevatorNumber The elevator number to move.
    * @param floorNumber The floor number to move the elevator to.
    * @param releaseFloor A function to release the floor.
    * @param gap The number of floors to travel.
    * @param currentTime The current time in milliseconds.
    * @param floors The array of floor objects in the building.
    */
-  static scheduleElevatorMove(elevator: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
-    const remainingTime: number = elevator.timer - currentTime;
+  static scheduleElevatorMove(elevatorNumber: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
+    const remainingTime: number = elevatorNumber.timer - currentTime;
 
     setTimeout(() => {
-      elevator.moveElevatorToFloor(floorNumber, releaseFloor);
+      elevatorNumber.moveElevatorToFloor(floorNumber, releaseFloor);
     }, remainingTime);
 
-    floors[floorNumber].startTimer(this.getRemainingTime(elevator.timer, currentTime));
-    elevator.timer += (gap * 0.5 + 2) * 1000;
+    floors[floorNumber].startTimer(this.getRemainingTime(elevatorNumber.timer, currentTime));
+    elevatorNumber.timer += (gap * 0.5 + 2) * 1000;
   }
 
   /**
