@@ -23,11 +23,11 @@ export class Floor {
   /**
    * Creates an instance of Floor.
    * @param floorNumber The number of the floor.
-   * @param orderElevator Callback function to order an elevator.
+   * @param dispatchElevator Callback function to order an elevator.
    */
   constructor(
     floorNumber: number,
-    orderElevator: (floorNumber: number) => void,
+    dispatchElevator: (floorNumber: number) => void,
   ) {
     this.floorNumber = floorNumber;
     this.floorElement = this.createFloorContainer();
@@ -35,7 +35,7 @@ export class Floor {
     this.lineElement = this.createLineElement();
     this.timerElement = this.createTimerElement();
 
-    this.initButtonListener(orderElevator);
+    this.initButtonListener(dispatchElevator);
     this.appendElements();
   }
 
@@ -87,11 +87,11 @@ export class Floor {
    * @param orderElevator Callback function to order an elevator.
    */
   private initButtonListener(
-    orderElevator: (floorNumber: number) => void,
+    dispatchElevator: (floorNumber: number) => void,
   ): void {
     this.buttonElement.onclick = () => {
       if (!this.isButtonPressed) {
-        orderElevator(this.floorNumber);
+        dispatchElevator(this.floorNumber);
         this.isButtonPressed = true;
         this.buttonElement.style.color = 'green';
       }

@@ -59,11 +59,11 @@ export class Elevator {
   /**
    * Moves the elevator to a target floor.
    * @param targetFloor The floor to move the elevator to.
-   * @param freeFloor Callback function to free a floor after the elevator stops.
+   * @param releaseFloor Callback function to free a floor after the elevator stops.
    */
   public moveElevatorToFloor(
     targetFloor: number,
-    freeFloor: (floorNumber: number) => void,
+    releaseFloor: (floorNumber: number) => void,
   ): void {
     const currentFloor = this.currentFloor;
 
@@ -77,7 +77,7 @@ export class Elevator {
       const timeInFloor = Settings[0].timeInFloor;
       setTimeout(() => {
         this.stopBell();
-        freeFloor(targetFloor);
+        releaseFloor(targetFloor);
       }, timeInFloor);
     }, gap * 0.5 * 1000);
   }
