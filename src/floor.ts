@@ -111,11 +111,10 @@ export class Floor {
    * @param duration The duration of the timer in seconds.
    */
   public startTimer(duration: number): void {
-    let initialDelay = duration % 1;
+    const initialDelay = (duration % 1) * 1000;
+    let remainingTime = Math.floor(duration);
+    this.updateTimer(remainingTime);
     setTimeout(() => {
-      let remainingTime = Math.floor(duration);
-      this.updateTimer(remainingTime);
-
       const countdown = setInterval(() => {
         remainingTime--;
         this.updateTimer(remainingTime);
@@ -124,7 +123,7 @@ export class Floor {
           this.timerElement.textContent = null;
         }
       }, 1000);
-    }, initialDelay * 1000);
+    }, initialDelay);
   }
 
 
