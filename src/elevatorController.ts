@@ -36,7 +36,7 @@ export class ElevatorController {
   static calculateTravelTime(elevatorNumber: Elevator, floorNumber: number, currentTime: number): number {
     const distanceTime: number = Math.abs(elevatorNumber.destination - floorNumber) * 500;
     const floorTime: number = Settings[0].timeInFloor;
-    const waitingTime: number = currentTime > elevatorNumber.timer ? 0 : elevatorNumber.timer - currentTime;
+    const waitingTime: number = currentTime > elevatorNumber.availability ? 0 : elevatorNumber.availability - currentTime;
     return distanceTime + floorTime + waitingTime;
   }
 
@@ -54,7 +54,7 @@ export class ElevatorController {
 
     selectedElevator.destination = floorNumber;
 
-    if (currentTime > selectedElevator.timer) {
+    if (currentTime > selectedElevator.availability) {
       this.moveElevatorImmediately(selectedElevator, floorNumber, releaseFloor, gap, currentTime, floors);
     } else {
       this.scheduleElevatorMove(selectedElevator, floorNumber, releaseFloor, gap, currentTime, floors);
@@ -72,7 +72,7 @@ export class ElevatorController {
    */
   static moveElevatorImmediately(elevatorNumber: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
     elevatorNumber.moveElevatorToFloor(floorNumber, releaseFloor);
-    elevatorNumber.timer = currentTime + (gap * 0.5 + 2) * 1000;
+    elevatorNumber.availability = currentTime + (gap * 0.5 + 2) * 1000;
     floors[floorNumber].startTimer(gap * 0.5);
   }
 
@@ -86,14 +86,14 @@ export class ElevatorController {
    * @param floors The array of floor objects in the building.
    */
   static scheduleElevatorMove(elevatorNumber: Elevator, floorNumber: number, releaseFloor: (floorNumber: number) => void, gap: number, currentTime: number, floors: Floor[]): void {
-    const remainingTime: number = elevatorNumber.timer - currentTime;
+    const remainingTime: number = elevatorNumber.availability - currentTime;
 
     setTimeout(() => {
       elevatorNumber.moveElevatorToFloor(floorNumber, releaseFloor);
     }, remainingTime);
 
-    floors[floorNumber].startTimer(this.getRemainingTime(elevatorNumber.timer, currentTime));
-    elevatorNumber.timer += (gap * 0.5 + 2) * 1000;
+    floors[floorNumber].startTimer(this.getRemainingTime(elevatorNumber.availability, currentTime));
+    elevatorNumber.availability += (gap * 0.5 + 2) * 1000;
   }
 
   /**

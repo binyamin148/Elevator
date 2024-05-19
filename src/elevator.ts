@@ -20,7 +20,7 @@ export class Elevator {
   destination: number;
 
   /** The timer for elevator operations. */
-  timer: number;
+  availability: number;
 
   /**
    * Creates an instance of Elevator.
@@ -32,7 +32,7 @@ export class Elevator {
     this.ringBell = this.createRingBell();
     this.currentFloor = 0;
     this.destination = 0;
-    this.timer = 0;
+    this.availability = 0;
   }
 
   /**
